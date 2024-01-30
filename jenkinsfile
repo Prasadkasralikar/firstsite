@@ -1,0 +1,65 @@
+pipeline {
+    agent any
+    environment {
+        name = "Prasad"
+    }
+    parameters {
+        string(name: 'person', defaultValue: 'Prasad Kasralikar', description: "Who are you?")
+    }
+    stages {
+        stage('Test') {
+            steps {
+                sh '''
+                ls
+                date
+                pwd
+                ls -a
+                '''
+            }
+        }
+        
+        stage('Environment Veriable') {
+            steps {
+                sh 'echo "$(name)"'
+            }
+        }
+        
+        stage('Parameters') {
+            steps {
+                sh 'echo "$(name)"'
+                sh 'echo "$(Person)"'
+            }
+        }
+        
+        stage('Continue ?') {
+            input {
+                message"Shoud we continue?"
+                ok "yeswe should"
+            }
+            steps {
+                echo 'Deploy on Prod'
+            }
+        }
+        
+        stage('Deploy on Prod') {
+            steps {
+                echo 'Deploy on Prod'
+            }
+        }
+        
+    }
+    
+    post{
+        always{
+        echo "I will always say NO, No means NO.."
+        }
+        
+        failure{
+        echo "Failed"
+        }
+        
+        success{
+        echo "Passed"
+        }
+    }
+}
